@@ -6,7 +6,7 @@ import StartMenu from '../src/components/StartMenu/StartMenu';
 function App() {
   return (
     <div>
-      <WordChallenge />
+      <StartMenu />
     </div>
   );
 }
