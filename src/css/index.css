@@ -5,12 +5,10 @@
 
 body {
   background-color: #ffffff;
-
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   min-height: 100vh;
   font-family: 'Lato', sans-serif;
   margin: 0;
@@ -20,6 +18,40 @@ h1 {
   letter-spacing: 2px;
   text-align: center;
   text-transform: uppercase;
+}
+
+
+
+.styled-button button {
+  font-size: 14px;
+  height: 29px;
+  padding: 5px; /* If you add too much padding here, the options won't show in IE */
+  width: 268px;
+  border: 1px #779126;
+  background-color: #779126;
+  color: white;
+}
+
+.rounded {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+
+.styled-select select {
+  background: transparent;
+  font-size: 14px;
+  height: 29px;
+  padding: 5px; /* If you add too much padding here, the options won't show in IE */
+  width: 268px;
+  border: 1px solid #111;
+  color: #111111;
+}
+
+.semi-square {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 footer {
