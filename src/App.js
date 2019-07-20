@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.css';
-import WordChallenge from '../src/components/WordChallenge'
+import WordChallenge from '../src/components/WordChallenge/WordChallenge';
+import StartMenu from '../src/components/StartMenu/StartMenu';
+
 
 function App() {
   return (
     <div>
-      <WordChallenge/>
+      <WordChallenge />
     </div>
   );
 }

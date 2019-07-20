@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import '../index.css'
+import './WordChallenge.css'
 import moment from 'moment';
-import {describeArc, mapNumber} from "../utils/helper";
+import {describeArc, mapNumber} from "../../utils/helper";
 
 const TimerCircle = ({ radius }) => (
     <svg className='countdown-svg'>
