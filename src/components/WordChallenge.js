@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import '../index.css'
 import moment from 'moment';
-import {describeArc} from "../utils/helper";
+import {describeArc, mapNumber} from "../utils/helper";
 
 const TimerCircle = ({ radius }) => (
     <svg className='countdown-svg'>
@@ -16,13 +16,13 @@ class WordChallenge extends Component {
         super(props);
 
         //// Get the unit of a minute in milliseconds
-        const endTime = moment().add(60, 'seconds').format("MM DD YYYY, h:mm a");
-        const startTime = moment().format('"MM DD YYYY, h:mm a"');
-        const countdown = moment(endTime).diff(startTime);
+        // const endTime = moment().add(60, 'seconds').format("MM DD YYYY, h:mm a");
+        // const startTime = moment().format('"MM DD YYYY, h:mm a"');
+        // const countdown = moment(endTime).diff(startTime);
 
         this.state = {
             playerScore: 0,
-            timerMilliseconds: countdown,
+            timerMilliseconds: 60,
             timerOn: true,
             correctWord: "",
             playersGuess: "",
@@ -35,8 +35,8 @@ class WordChallenge extends Component {
          setInterval(() => {
 
             if(this.state.timerOn){
-                 const oneSecondFromCurrentTimer = this.state.timerMilliseconds - 1000;
-                 if (oneSecondFromCurrentTimer < 1000) {
+                 const oneSecondFromCurrentTimer = this.state.timerMilliseconds - 1;
+                 if (oneSecondFromCurrentTimer < 1) {
 
                      this.setState({
                          timerOn: false,
@@ -58,10 +58,23 @@ class WordChallenge extends Component {
 
 
     render() {
+
+        const secondsRadius = mapNumber(this.state.timerMilliseconds, 60, 0, 0, 360);
+
         return (
             <div>
-                <h1>Timer On: {this.state.timerOn}</h1>
-                <h1>Timer Seconds: {this.state.timerMilliseconds}</h1>
+
+
+
+                <div className='countdown-wrapper'>
+                    {this.state.timerMilliseconds && (
+                        <div className='countdown-item'>
+                            <TimerCircle radius={secondsRadius} />
+                            {this.state.timerMilliseconds}
+                            <span>seconds</span>
+                        </div>
+                    )}
+                </div>
             </div>
         );
     }
