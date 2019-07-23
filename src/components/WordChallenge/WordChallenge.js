@@ -69,7 +69,7 @@ class WordChallenge extends Component {
                 </div>
                 <div className="section-wrapper">
                     <div className="section-item semi-square styled-input animated shake fast">
-                        <input type="text" />
+                        <input type="text" className={'input-border-color'} />
                     </div>
                 </div>
             </div>
