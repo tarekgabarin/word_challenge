@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
 import {getWord} from "../../utils/api";
+import { Formik } from 'formik';
 
 class WordChallenge extends Component {
 
     constructor(props){
         super(props);
-
-        console.log('this.props.params is', this.props);
 
         this.state = {
             playerScore: 0,
@@ -16,6 +15,7 @@ class WordChallenge extends Component {
             timerOn: true,
             correctWord: "",
             playersGuess: "",
+            showFormValidation: false,
             isGameOver: false
         }
     }
@@ -24,7 +24,6 @@ class WordChallenge extends Component {
     componentDidMount() {
 
         getWord().then(response => {
-            console.log('response is', response);
 
             const word = response.data[0];
 
@@ -32,6 +31,10 @@ class WordChallenge extends Component {
                 correctWord: word
             })
 
+        }).catch(err => {
+            if(err){
+                console.log(err)
+            }
         });
 
          setInterval(() => {
@@ -59,7 +62,33 @@ class WordChallenge extends Component {
 
 
 
+    onEnterWord = (event) =>  {
+
+        ///TODO finish this function
+
+        event.preventDefault();
+
+        this.setState({showFormValidation: true});
+
+        setTimeout( () => {
+
+            this.setState({showFormValidation: false})
+
+
+        }, 300);
+
+
+    };
+
+
+
     render() {
+
+        const textInputJSX = (this.state.showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
+            <input type="text" className={'wrong-input-border'} />
+        </div>) : (<div className="section-item semi-square styled-input">
+            <input type="text" className={'input-border'} />
+        </div>)
 
         return (
             <div>
@@ -81,10 +110,11 @@ class WordChallenge extends Component {
                     </div>
                 </div>
                 <div className="section-wrapper">
-                    <div className="section-item semi-square styled-input animated shake fast">
-                        <input type="text" className={'input-border-color'} />
-                    </div>
+
+                    {textInputJSX}
+
                 </div>
+
             </div>
         );
     }
