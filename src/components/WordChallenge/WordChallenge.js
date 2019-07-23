@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
+import {getWord} from "../../utils/api";
 
 class WordChallenge extends Component {
 
@@ -21,6 +22,18 @@ class WordChallenge extends Component {
 
 
     componentDidMount() {
+
+        getWord().then(response => {
+            console.log('response is', response);
+
+            const word = response.data[0];
+
+            this.setState({
+                correctWord: word
+            })
+
+        });
+
          setInterval(() => {
 
             if(this.state.timerOn){
