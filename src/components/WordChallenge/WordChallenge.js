@@ -67,6 +67,11 @@ class WordChallenge extends Component {
                         <h1>Complexity</h1>
                     </div>
                 </div>
+                <div className="section-wrapper">
+                    <div className="section-item semi-square styled-input">
+                        <input type="text" />
+                    </div>
+                </div>
             </div>
         );
     }
