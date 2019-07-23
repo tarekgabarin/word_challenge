@@ -40,15 +40,14 @@
     text-transform: uppercase;
 }
 
-.word-wrapper {
-    display: flex;
-    align-items: center;
+.wrong-entry {
+    -webkit-animation-name: wrong-word;
+    -webkit-animation-duration: 0.3s;
 }
 
-.countdown-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100px;
-    height: 100px;
+@-webkit-keyframes wrong-word {
+    0%, 100% { left: 0px;}
+    20% , 60%{left: 15px;}
+    40% , 80%{left: -15px;}
 }
+
