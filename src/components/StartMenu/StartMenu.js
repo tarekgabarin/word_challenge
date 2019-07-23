@@ -42,8 +42,10 @@ class StartMenu extends Component {
             selectedTimeInSeconds: selectedTime
         });
 
-        console.log('selectedTime is', selectedTime);
+    };
 
+    onStart = () => {
+        this.props.history.push('/challenge/' + this.state.selectedTimeInSeconds)
     };
 
     render() {
@@ -54,7 +56,7 @@ class StartMenu extends Component {
 
 
         return (
-            <div>
+            <div className={'start-menu-container'}>
                 <div className={'item'}>
                     <h1>Start Typing Test</h1>
                 </div>
@@ -65,7 +67,7 @@ class StartMenu extends Component {
                 </div>
 
                 <div className="styled-button item">
-                    <button className={'rounded'} >
+                    <button onClick={this.onStart} className={'rounded'} >
                         Start
                     </button>
                 </div>

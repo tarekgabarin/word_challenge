@@ -3,7 +3,7 @@
 }
 
 
-body {
+.start-menu-container {
   background-color: #ffffff;
   display: flex;
   align-items: center;

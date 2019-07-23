@@ -1,28 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
-import moment from 'moment';
-import {describeArc, mapNumber} from "../../utils/helper";
-
-const TimerCircle = ({ radius }) => (
-    <svg className='countdown-svg'>
-        <path fill="none" stroke="#333" stroke-width="4" d={describeArc(50, 50, 48, 0, radius)}/>
-    </svg>
-);
 
 class WordChallenge extends Component {
 
     constructor(props){
         super(props);
 
-        //// Get the unit of a minute in milliseconds
-        // const endTime = moment().add(60, 'seconds').format("MM DD YYYY, h:mm a");
-        // const startTime = moment().format('"MM DD YYYY, h:mm a"');
-        // const countdown = moment(endTime).diff(startTime);
+        console.log('this.props.params is', this.props);
 
         this.state = {
             playerScore: 0,
-            timerMilliseconds: 60,
+            timerMilliseconds: this.props.match.params.seconds,
             timerOn: true,
             correctWord: "",
             playersGuess: "",
@@ -59,21 +48,19 @@ class WordChallenge extends Component {
 
     render() {
 
-        const secondsRadius = mapNumber(this.state.timerMilliseconds, 60, 0, 0, 360);
-
         return (
             <div>
-
-
-
                 <div className='countdown-wrapper'>
                     {this.state.timerMilliseconds && (
                         <div className='countdown-item'>
-                            <TimerCircle radius={secondsRadius} />
-                            {this.state.timerMilliseconds}
                             <span>seconds</span>
+                            {this.state.timerMilliseconds}
                         </div>
                     )}
+                    <div className="countdown-item">
+                        <span>Score</span>
+                        0
+                    </div>
                 </div>
             </div>
         );
