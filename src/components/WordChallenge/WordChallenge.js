@@ -60,6 +60,15 @@ class WordChallenge extends Component {
         }, 1000);
     }
 
+    setTextInput = (event) => {
+
+        console.log('event.target.value is', event.target.value);
+
+        this.setState({
+            playersGuess: event.target.value
+        })
+    };
+
 
 
     onEnterWord = (event) =>  {
@@ -85,9 +94,9 @@ class WordChallenge extends Component {
     render() {
 
         const textInputJSX = (this.state.showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
-            <input type="text" className={'wrong-input-border'} />
+            <input onChange={this.setTextInput} type="text" className={'wrong-input-border'} />
         </div>) : (<div className="section-item semi-square styled-input">
-            <input type="text" className={'input-border'} />
+            <input onChange={this.setTextInput} type="text" className={'input-border'} />
         </div>)
 
         return (
