@@ -58,7 +58,7 @@ class StartMenu extends Component {
         return (
             <div className={'start-menu-container'}>
                 <div className={'item'}>
-                    <h1>Start Typing Test</h1>
+                    <h1 className={'start-header-title'}>Start Typing Test</h1>
                 </div>
                 <div className="styled-select semi-square item" >
                     <select value={this.state.selectedTimeInSeconds} onChange={(e) => this.onSelectTime(e)}>

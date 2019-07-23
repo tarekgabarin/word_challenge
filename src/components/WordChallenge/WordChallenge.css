@@ -1,11 +1,11 @@
-.countdown-wrapper {
+.section-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.countdown-item {
+.section-item {
     color: #111;
     font-size: 40px;
     display: flex;
@@ -20,12 +20,19 @@
     height: 100px;
 }
 
-.countdown-item span {
+.section-item span {
     color: #333;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
 }
+
+.word-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+
 
 .countdown-svg {
     position: absolute;

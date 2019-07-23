@@ -50,16 +50,21 @@ class WordChallenge extends Component {
 
         return (
             <div>
-                <div className='countdown-wrapper'>
+                <div className='section-wrapper'>
                     {this.state.timerMilliseconds && (
-                        <div className='countdown-item'>
+                        <div className='section-item'>
                             <span>seconds</span>
                             {this.state.timerMilliseconds}
                         </div>
                     )}
-                    <div className="countdown-item">
+                    <div className="section-item">
                         <span>Score</span>
                         0
+                    </div>
+                </div>
+                <div className="section-wrapper">
+                    <div className="section-item">
+                        <h1>Complexity</h1>
                     </div>
                 </div>
             </div>
