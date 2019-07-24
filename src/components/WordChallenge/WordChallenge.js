@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
 import {getWord} from "../../utils/api";
+import {intersectionTypeAnnotation} from "@babel/types";
 
 class WordChallenge extends Component {
 
@@ -124,30 +125,52 @@ class WordChallenge extends Component {
             <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess} onChange={this.setTextInput} type="text" className={'wrong-input-border'} />
         </div>) : (<div className="section-item semi-square styled-input">
             <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess}  onChange={this.setTextInput} type="text" className={'input-border'} />
-        </div>)
+        </div>);
+
+
+        const timeOverOptionsJSX = (
+            <section>
+                    <h5>You're WPM is 10</h5>
+
+                <div className="section-item">
+                    <div className="styled-button item">
+                        <button className={'rounded'} >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        );
+
+        ///const currentGameMenuJSX =
+
 
         return (
             <div>
-                <div className='section-wrapper'>
-                    {this.state.timerSeconds && (
-                        <div className='section-item'>
-                            <span>seconds</span>
-                            {this.state.timerSeconds}
+
+                <section>
+                    <div className='section-wrapper'>
+                            <div className='section-item'>
+                                <span>seconds</span>
+                                {this.state.timerSeconds}
+                            </div>
+
+                        <div className="section-item">
+                            <span>Score</span>
+                            {this.state.playerScore}
                         </div>
-                    )}
-                    <div className="section-item">
-                        <span>Score</span>
-                        {this.state.playerScore}
                     </div>
-                </div>
-                <div className="section-wrapper">
-                    <div className="section-item">
-                        <h1>{this.state.correctWord}</h1>
+                    <div className="section-wrapper">
+                        <div className="section-item">
+                            <h1>{this.state.correctWord}</h1>
+                        </div>
                     </div>
-                </div>
+                </section>
+
                 <div className="section-wrapper">
 
-                    {textInputJSX}
+                    {timeOverOptionsJSX}
 
                 </div>
 
