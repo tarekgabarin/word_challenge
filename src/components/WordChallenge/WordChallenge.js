@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
 import {getWord} from "../../utils/api";
-import { Formik } from 'formik';
 
 class WordChallenge extends Component {
 
@@ -11,7 +10,8 @@ class WordChallenge extends Component {
 
         this.state = {
             playerScore: 0,
-            timerMilliseconds: this.props.match.params.seconds,
+            timerSeconds: this.props.match.params.seconds,
+            minutes: Number(this.props.match.params.seconds) / 60,
             timerOn: true,
             correctWord: "",
             playersGuess: "",
@@ -40,17 +40,17 @@ class WordChallenge extends Component {
          setInterval(() => {
 
             if(this.state.timerOn){
-                 const oneSecondFromCurrentTimer = this.state.timerMilliseconds - 1;
+                 const oneSecondFromCurrentTimer = this.state.timerSeconds - 1;
                  if (oneSecondFromCurrentTimer < 1) {
 
                      this.setState({
                          timerOn: false,
-                         timerMilliseconds: 0
+                         timerSeconds: 0
                      })
 
                  } else {
                      this.setState({
-                         timerMilliseconds: oneSecondFromCurrentTimer
+                         timerSeconds: oneSecondFromCurrentTimer
                      })
                  }
             }
@@ -69,23 +69,50 @@ class WordChallenge extends Component {
         })
     };
 
+    enterKeyPressed = (event) => {
+        if (event.key === "Enter") {
+
+            const enteredWord = this.state.playersGuess.toLowerCase().trim();
+
+            if (enteredWord === this.state.correctWord){
+
+                getWord().then(response => {
+
+                    const word = response.data[0];
+
+                    this.setState({
+                        correctWord: word,
+                        playerScore: this.state.playerScore + 100,
+                        playersGuess: ""
+                    })
+
+                }).catch(err => {
+                    if(err){
+                        console.log(err)
+                    }
+                });
+
+            } else {
+
+                this.setState({showFormValidation: true});
+
+                setTimeout( () => {
+
+                    this.setState({showFormValidation: false})
 
 
-    onEnterWord = (event) =>  {
+                }, 300);
 
-        ///TODO finish this function
+            }
 
-        event.preventDefault();
+        }
+    };
 
-        this.setState({showFormValidation: true});
+    calculateWordsPerMinute = () => {
 
-        setTimeout( () => {
+        const wordsTyped = this.state.playerScore / 100;
 
-            this.setState({showFormValidation: false})
-
-
-        }, 300);
-
+        return  wordsTyped / this.state.minutes
 
     };
 
@@ -94,28 +121,28 @@ class WordChallenge extends Component {
     render() {
 
         const textInputJSX = (this.state.showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
-            <input onChange={this.setTextInput} type="text" className={'wrong-input-border'} />
+            <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess} onChange={this.setTextInput} type="text" className={'wrong-input-border'} />
         </div>) : (<div className="section-item semi-square styled-input">
-            <input onChange={this.setTextInput} type="text" className={'input-border'} />
+            <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess}  onChange={this.setTextInput} type="text" className={'input-border'} />
         </div>)
 
         return (
             <div>
                 <div className='section-wrapper'>
-                    {this.state.timerMilliseconds && (
+                    {this.state.timerSeconds && (
                         <div className='section-item'>
                             <span>seconds</span>
-                            {this.state.timerMilliseconds}
+                            {this.state.timerSeconds}
                         </div>
                     )}
                     <div className="section-item">
                         <span>Score</span>
-                        0
+                        {this.state.playerScore}
                     </div>
                 </div>
                 <div className="section-wrapper">
                     <div className="section-item">
-                        <h1>Complexity</h1>
+                        <h1>{this.state.correctWord}</h1>
                     </div>
                 </div>
                 <div className="section-wrapper">
@@ -131,7 +158,7 @@ class WordChallenge extends Component {
 
 WordChallenge.propTypes = {
     playerScore: PropTypes.number,
-    timerMilliseconds: PropTypes.number,
+    timerSeconds: PropTypes.number,
     correctWord: PropTypes.string,
     playersGuess: PropTypes.string,
     isGameOver: PropTypes.bool
