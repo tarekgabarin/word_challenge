@@ -16,14 +16,15 @@ class WordChallenge extends Component {
             correctWord: "",
             playersGuess: "",
             showFormValidation: false,
-            isGameOver: false,
-            wordsPerMinute: null
+            wordsPerMinute: 0
         }
     }
 
 
     componentDidMount() {
 
+
+        ///API call to get random word
         getWord().then(response => {
 
             const word = response.data[0];
@@ -38,6 +39,7 @@ class WordChallenge extends Component {
             }
         });
 
+        ///Set the timer when the game begins, and end game when timer has reached zero seconds
          setInterval(() => {
 
             if(this.state.timerOn){
@@ -71,6 +73,7 @@ class WordChallenge extends Component {
         })
     };
 
+    ///Checks to see if the word has been correctly typed when the user presses the "Enter" key
     enterKeyPressed = (event) => {
         if (event.key === "Enter") {
 
@@ -110,6 +113,7 @@ class WordChallenge extends Component {
         }
     };
 
+    //Calculate the WPM once the timer is up
     calculateWordsPerMinute = () => {
 
         const wordsTyped = this.state.playerScore / 100;
@@ -118,6 +122,7 @@ class WordChallenge extends Component {
 
     };
 
+    ///Go back to the start menu
     goBack = (event) => {
 
         event.preventDefault();
@@ -203,7 +208,10 @@ WordChallenge.propTypes = {
     timerSeconds: PropTypes.number,
     correctWord: PropTypes.string,
     playersGuess: PropTypes.string,
-    isGameOver: PropTypes.bool
+    timerOn: PropTypes.bool,
+    showFormValidation: PropTypes.bool,
+    minutes: PropTypes.number,
+    wordsPerMinute: PropTypes.number
 };
 
 export default WordChallenge;
