@@ -24,7 +24,7 @@
     background: transparent;
     font-size: 18px;
     height: 29px;
-    padding: 5px; /* If you add too much padding here, the options won't show in IE */
+    padding: 5px;
     width: 268px;
     color: #111111;
     -webkit-border-radius: 5px;
