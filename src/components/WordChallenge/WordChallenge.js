@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
 import {getWord} from "../../utils/api";
-import {intersectionTypeAnnotation} from "@babel/types";
 
 class WordChallenge extends Component {
 
@@ -17,7 +16,8 @@ class WordChallenge extends Component {
             correctWord: "",
             playersGuess: "",
             showFormValidation: false,
-            isGameOver: false
+            isGameOver: false,
+            wordsPerMinute: null
         }
     }
 
@@ -44,9 +44,12 @@ class WordChallenge extends Component {
                  const oneSecondFromCurrentTimer = this.state.timerSeconds - 1;
                  if (oneSecondFromCurrentTimer < 1) {
 
+                     const wordsPerMinute = this.calculateWordsPerMinute();
+
                      this.setState({
                          timerOn: false,
-                         timerSeconds: 0
+                         timerSeconds: 0,
+                         wordsPerMinute
                      })
 
                  } else {
@@ -62,8 +65,6 @@ class WordChallenge extends Component {
     }
 
     setTextInput = (event) => {
-
-        console.log('event.target.value is', event.target.value);
 
         this.setState({
             playersGuess: event.target.value
@@ -117,6 +118,14 @@ class WordChallenge extends Component {
 
     };
 
+    goBack = (event) => {
+
+        event.preventDefault();
+
+        this.props.history.push('/')
+
+    };
+
 
 
     render() {
@@ -130,11 +139,10 @@ class WordChallenge extends Component {
 
         const timeOverOptionsJSX = (
             <section>
-                    <h5>You're WPM is 10</h5>
 
                 <div className="section-item">
                     <div className="styled-button item">
-                        <button className={'rounded'} >
+                        <button onClick={(e) => this.goBack(e)} className={'rounded'} >
                             Retry
                         </button>
                     </div>
@@ -143,13 +151,13 @@ class WordChallenge extends Component {
 
         );
 
-        ///const currentGameMenuJSX =
+        const currentGameMenuJSX = (this.state.timerSeconds !== 0) ? textInputJSX : timeOverOptionsJSX;
 
 
         return (
             <div>
 
-                <section>
+
                     <div className='section-wrapper'>
                             <div className='section-item'>
                                 <span>seconds</span>
@@ -161,16 +169,27 @@ class WordChallenge extends Component {
                             {this.state.playerScore}
                         </div>
                     </div>
+
+
+                {(this.state.timerSeconds !== 0) ? (
                     <div className="section-wrapper">
                         <div className="section-item">
                             <h1>{this.state.correctWord}</h1>
                         </div>
                     </div>
-                </section>
+                ) : (
+                    <div className="section-wrapper">
+                        <div className="section-item">
+                            <span>Your WPM is</span>
+                            {this.state.wordsPerMinute}
+                        </div>
+                    </div>
+                )}
+
 
                 <div className="section-wrapper">
 
-                    {timeOverOptionsJSX}
+                    {currentGameMenuJSX}
 
                 </div>
 
