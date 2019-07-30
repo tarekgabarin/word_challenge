@@ -1,56 +1,47 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 
-class StartMenu extends Component {
+export default function StartMenu (props) {
 
-    constructor(props){
-        super(props);
+    const [selectedTimeInSeconds, setTime] = useState(60);
 
-        this.state = {
-            selectedTimeInSeconds: 60,
-            listOfTimes: [
-                {
-                text: '1 minute',
-                time: 60
-                },
-                {
-                    text: '2 minute',
-                    time: 120
-                },
-                {
-                    text: '3 minute',
-                    time: 180
-                },
-                {
-                    text: '4 minute',
-                    time: 240
-                },
-                {
-                    text: '5 minute',
-                    time: 300
-                },
-            ]
+    const [listOfTimes] = useState([
+        {
+            text: '1 minute',
+            time: 60
+        },
+        {
+            text: '2 minute',
+            time: 120
+        },
+        {
+            text: '3 minute',
+            time: 180
+        },
+        {
+            text: '4 minute',
+            time: 240
+        },
+        {
+            text: '5 minute',
+            time: 300
+        },
+    ]);
 
-        }
-
-    }
-
-    onSelectTime = (event) => {
+    function onSelectTime (event) {
 
         const selectedTime = Number(event.target.value);
 
-        this.setState({
-            selectedTimeInSeconds: selectedTime
-        });
+        setTime(selectedTime);
 
-    };
+    }
 
-    onStart = () => {
-        this.props.history.push('/challenge/' + this.state.selectedTimeInSeconds)
-    };
 
-    render() {
+    function onStart() {
+        props.history.push('/challenge/' + selectedTimeInSeconds)
+    }
 
-        const timeOptionsJSX = this.state.listOfTimes.map(item => {
+
+        const timeOptionsJSX = listOfTimes.map(item => {
             return <option value={item.time}>{item.text}</option>
         });
 
@@ -61,13 +52,13 @@ class StartMenu extends Component {
                     <h1 className={'start-header-title'}>Start Typing Test</h1>
                 </div>
                 <div className="styled-select semi-square item" >
-                    <select value={this.state.selectedTimeInSeconds} onChange={(e) => this.onSelectTime(e)}>
+                    <select value={selectedTimeInSeconds} onChange={onSelectTime}>
                         {timeOptionsJSX}
                     </select>
                 </div>
 
                 <div className="styled-button item">
-                    <button onClick={this.onStart} className={'rounded'} >
+                    <button onClick={onStart} className={'rounded'} >
                         Start
                     </button>
                 </div>
@@ -75,7 +66,6 @@ class StartMenu extends Component {
 
             </div>
         );
-    }
 }
 
-export default StartMenu;
+
