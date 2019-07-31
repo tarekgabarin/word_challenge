@@ -16,7 +16,8 @@ class WordChallenge extends Component {
             correctWord: "",
             playersGuess: "",
             showFormValidation: false,
-            wordsPerMinute: 0
+            wordsPerMinute: 0,
+            hasNetworkError: false
         }
     }
 
@@ -35,7 +36,10 @@ class WordChallenge extends Component {
 
         }).catch(err => {
             if(err){
-                console.log(err)
+                console.log(err);
+                this.setState({
+                    hasNetworkError: true
+                })
             }
         });
 
@@ -93,7 +97,10 @@ class WordChallenge extends Component {
 
                 }).catch(err => {
                     if(err){
-                        console.log(err)
+                        console.log(err);
+                        this.setState({
+                            hasNetworkError: true
+                        })
                     }
                 });
 
@@ -156,7 +163,15 @@ class WordChallenge extends Component {
 
         );
 
+        const hasErrorJSX = (<div className={'section-wrapper'}>
+                                <div className="section-item">
+                                    <h1>Server Error</h1>
+                                </div>
+                            </div>);
+
         const currentGameMenuJSX = (this.state.timerSeconds !== 0) ? textInputJSX : timeOverOptionsJSX;
+
+        const lowerUI = (this.state.hasNetworkError) ? (hasErrorJSX) : (currentGameMenuJSX);
 
 
         return (
@@ -194,7 +209,7 @@ class WordChallenge extends Component {
 
                 <div className="section-wrapper">
 
-                    {currentGameMenuJSX}
+                    {lowerUI}
 
                 </div>
 
