@@ -2,5 +2,5 @@ import axios from 'axios';
 
 
 export function getWord() {
-    return axios.get('https://random-word-api.netlify.com/.netlify/functions/word?key=foobar');
+    return axios.get('https://random-word-api.herokuapp.com/word');
 }
