@@ -5,22 +5,6 @@ import {getWord} from "../../utils/api";
 
 const WordChallenge = (props) => {
 
-    // constructor(props){
-    //     super(props);
-
-    //     this.state = {
-    //         playerScore: 0,
-    //         timerSeconds: this.props.match.params.seconds,
-    //         minutes: Number(this.props.match.params.seconds) / 60,
-    //         timerOn: true,
-    //         correctWord: "",
-    //         playersGuess: "",
-    //         showFormValidation: false,
-    //         wordsPerMinute: 0,
-    //         hasNetworkError: false
-    //     }
-    // }
-
     const [playerScore, setPlayerScore] = useState(0)
     const [timerSeconds, setTimerSeconds] = useState(Number(props.match.params.seconds))
     const [minutes, ] = useState(Number(props.match.params.seconds) / 60)
