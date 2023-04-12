@@ -1,118 +1,106 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import './WordChallenge.css'
 import {getWord} from "../../utils/api";
 
-class WordChallenge extends Component {
+const WordChallenge = (props) => {
 
-    constructor(props){
-        super(props);
+    // constructor(props){
+    //     super(props);
 
-        this.state = {
-            playerScore: 0,
-            timerSeconds: this.props.match.params.seconds,
-            minutes: Number(this.props.match.params.seconds) / 60,
-            timerOn: true,
-            correctWord: "",
-            playersGuess: "",
-            showFormValidation: false,
-            wordsPerMinute: 0,
-            hasNetworkError: false
-        }
-    }
+    //     this.state = {
+    //         playerScore: 0,
+    //         timerSeconds: this.props.match.params.seconds,
+    //         minutes: Number(this.props.match.params.seconds) / 60,
+    //         timerOn: true,
+    //         correctWord: "",
+    //         playersGuess: "",
+    //         showFormValidation: false,
+    //         wordsPerMinute: 0,
+    //         hasNetworkError: false
+    //     }
+    // }
 
+    const [playerScore, setPlayerScore] = useState(0)
+    const [timerSeconds, setTimerSeconds] = useState(Number(props.match.params.seconds))
+    const [minutes, ] = useState(Number(props.match.params.seconds) / 60)
+    const [showFormValidation, setShowFormValidation] = useState(false)
+    const [timerOn, setTimerOn] = useState(true)
+    const [correctWord, setCorrectWord] = useState("")
+    const [playersGuess, setPlayersGuess] = useState("")
+    const [wordsPerMinute, setWordsPerMinute] = useState(0)
+    const [hasNetworkError, setHasNetworkError] = useState(false)
 
-    componentDidMount() {
+    const [hasGameStarted, setHasGameStarted] = useState(false)
 
+        //Calculate the WPM once the timer is up
+    const calculateWordsPerMinute = useCallback(() => {
+            const wordsTyped = playerScore / 100;
+            return  wordsTyped / minutes
+        }, [playerScore, minutes]);
 
-        ///API call to get random word
-        getWord().then(response => {
-
-            const word = response.data[0];
-
-            this.setState({
-                correctWord: word
-            })
-
-        }).catch(err => {
-            if(err){
-                console.log(err);
-                this.setState({
-                    hasNetworkError: true
-                })
+    useEffect(() => {
+            ///API call to get random word
+            if (hasGameStarted === false){
+                getWord().then(response => {
+                    const word = response.data[0];
+                    setCorrectWord(word)
+                    setHasGameStarted(true)        
+                }).catch(err => {
+                    if(err){
+                        console.log(err);
+                        setHasNetworkError(true)
+                    }
+                });
             }
-        });
 
         ///Set the timer when the game begins, and end game when timer has reached zero seconds
-         setInterval(() => {
-
-            if(this.state.timerOn){
-                 const oneSecondFromCurrentTimer = this.state.timerSeconds - 1;
+         const interval = setInterval(() => {
+            if(timerOn){
+                 const oneSecondFromCurrentTimer = timerSeconds - 1;
                  if (oneSecondFromCurrentTimer < 1) {
-
-                     const wordsPerMinute = this.calculateWordsPerMinute();
-
-                     this.setState({
-                         timerOn: false,
-                         timerSeconds: 0,
-                         wordsPerMinute
-                     })
+                     const wordsPerMinute = calculateWordsPerMinute();
+                     setTimerOn(false)
+                     setTimerSeconds(0)
+                     setWordsPerMinute(wordsPerMinute)
 
                  } else {
-                     this.setState({
-                         timerSeconds: oneSecondFromCurrentTimer
-                     })
+                    setTimerSeconds(oneSecondFromCurrentTimer)
                  }
             }
-
-
-
+            return clearInterval(interval)
         }, 1000);
-    }
+        
+    }, [calculateWordsPerMinute, timerSeconds, hasGameStarted, timerOn])
 
-    setTextInput = (event) => {
-
-        this.setState({
-            playersGuess: event.target.value
-        })
+    const setTextInput = (event) => {
+        setPlayersGuess(event.target.value)
     };
 
     ///Checks to see if the word has been correctly typed when the user presses the "Enter" key
-    enterKeyPressed = (event) => {
+    const enterKeyPressed = (event) => {
         if (event.key === "Enter") {
-
-            const enteredWord = this.state.playersGuess.toLowerCase().trim();
-
-            if (enteredWord === this.state.correctWord){
-
+            const enteredWord = playersGuess.toLowerCase().trim();
+            if (enteredWord === correctWord){
                 getWord().then(response => {
-
                     const word = response.data[0];
-
-                    this.setState({
-                        correctWord: word,
-                        playerScore: this.state.playerScore + 100,
-                        playersGuess: ""
-                    })
+                    setCorrectWord(word)
+                    setPlayerScore(playerScore + 100)
+                    setPlayersGuess("")
 
                 }).catch(err => {
                     if(err){
                         console.log(err);
-                        this.setState({
-                            hasNetworkError: true
-                        })
+                        setHasNetworkError(true)
                     }
                 });
 
             } else {
 
-                this.setState({showFormValidation: true});
+                setShowFormValidation(true)
 
                 setTimeout( () => {
-
-                    this.setState({showFormValidation: false})
-
-
+                    setShowFormValidation(false)
                 }, 300);
 
             }
@@ -120,32 +108,20 @@ class WordChallenge extends Component {
         }
     };
 
-    //Calculate the WPM once the timer is up
-    calculateWordsPerMinute = () => {
 
-        const wordsTyped = this.state.playerScore / 100;
-
-        return  wordsTyped / this.state.minutes
-
-    };
 
     ///Go back to the start menu
-    goBack = (event) => {
-
+    const goBack = (event) => {
         event.preventDefault();
-
-        this.props.history.push('/')
-
+        props.history.push('/')
     };
 
+     {
 
-
-    render() {
-
-        const textInputJSX = (this.state.showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
-            <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess} onChange={this.setTextInput} type="text" className={'wrong-input-border'} />
+        const textInputJSX = (showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
+            <input onKeyPress={enterKeyPressed} value={playersGuess} onChange={setTextInput} type="text" className={'wrong-input-border'} />
         </div>) : (<div className="section-item semi-square styled-input">
-            <input onKeyPress={this.enterKeyPressed} value={this.state.playersGuess}  onChange={this.setTextInput} type="text" className={'input-border'} />
+            <input onKeyPress={enterKeyPressed} value={playersGuess}  onChange={setTextInput} type="text" className={'input-border'} />
         </div>);
 
 
@@ -154,7 +130,7 @@ class WordChallenge extends Component {
 
                 <div className="section-item">
                     <div className="styled-button item">
-                        <button onClick={(e) => this.goBack(e)} className={'rounded'} >
+                        <button onClick={(e) => goBack(e)} className={'rounded'} >
                             Retry
                         </button>
                     </div>
@@ -169,9 +145,9 @@ class WordChallenge extends Component {
                                 </div>
                             </div>);
 
-        const currentGameMenuJSX = (this.state.timerSeconds !== 0) ? textInputJSX : timeOverOptionsJSX;
+        const currentGameMenuJSX = (timerSeconds !== 0) ? textInputJSX : timeOverOptionsJSX;
 
-        const lowerUI = (this.state.hasNetworkError) ? (hasErrorJSX) : (currentGameMenuJSX);
+        const lowerUI = (hasNetworkError) ? (hasErrorJSX) : (currentGameMenuJSX);
 
 
         return (
@@ -181,27 +157,27 @@ class WordChallenge extends Component {
                     <div className='section-wrapper'>
                             <div className='section-item'>
                                 <span>seconds</span>
-                                {this.state.timerSeconds}
+                                {timerSeconds}
                             </div>
 
                         <div className="section-item">
                             <span>Score</span>
-                            {this.state.playerScore}
+                            {playerScore}
                         </div>
                     </div>
 
 
-                {(this.state.timerSeconds !== 0) ? (
+                {(timerSeconds !== 0) ? (
                     <div className="section-wrapper">
                         <div className="section-item">
-                            <h1>{this.state.correctWord}</h1>
+                            <h1>{correctWord}</h1>
                         </div>
                     </div>
                 ) : (
                     <div className="section-wrapper">
                         <div className="section-item">
                             <span>Your WPM is</span>
-                            {this.state.wordsPerMinute}
+                            {wordsPerMinute}
                         </div>
                     </div>
                 )}
