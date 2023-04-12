@@ -119,9 +119,9 @@ const WordChallenge = (props) => {
      {
 
         const textInputJSX = (showFormValidation) ? (<div className="section-item semi-square styled-input animated shake fast">
-            <input onKeyPress={enterKeyPressed} value={playersGuess} onChange={setTextInput} type="text" className={'wrong-input-border'} />
+            <input onKeyDown={enterKeyPressed} value={playersGuess} onChange={setTextInput} type="text" className={'wrong-input-border'} />
         </div>) : (<div className="section-item semi-square styled-input">
-            <input onKeyPress={enterKeyPressed} value={playersGuess}  onChange={setTextInput} type="text" className={'input-border'} />
+            <input onKeyDown={enterKeyPressed} value={playersGuess}  onChange={setTextInput} type="text" className={'input-border'} />
         </div>);
 
 
